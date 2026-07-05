@@ -38,7 +38,7 @@ const Login = () => {
         cookies.set("reftoken", response.data.refreshToken);
         if (roleFromToken === "Admin") {
           cookies.set("role", roleFromToken);
-          nav("/dashboard");
+          nav("/dashboard/users");
         } else {
           nav("/");
         }

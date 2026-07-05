@@ -18,18 +18,23 @@ import Trips from "./Pages/Dashboard/Trips/Trips";
 import Protoflio from "./Pages/Dashboard/Trips/Protoflio";
 import UpdateTrip from "./Pages/Dashboard/Trips/UpdateTrip";
 import Users from "./Pages/Dashboard/Users/Users";
+import Err404 from "./Components/Utils/Err404";
+import Profile from "./Pages/Dashboard/Users/Profile";
+import UpdateUser from "./Pages/Dashboard/Users/UpdateUser";
 const App = () => {
   return (
     <div className="bg-background min-h-screen">
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route element={<GoBack />}> */}
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        {/* </Route> */}
+        <Route element={<GoBack />}>
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+        </Route>
         <Route element={<ProtectedRoutes />}>
           <Route path="/dashboard" element={<Dashboard />}>
-          <Route path="users" element={<Users />}/>
+            <Route path="users" element={<Users />} />
+            <Route path="users/protoflio/:id" element={<Profile />} />
+            <Route path="users/:id" element={<UpdateUser />} />
             <Route path="captains" element={<Captains />} />
             <Route path="captains/:id" element={<UpdateCaptain />} />
             <Route path="addcaptain" element={<AddCaptain />} />
@@ -42,6 +47,7 @@ const App = () => {
             <Route path="trips/protoflio/:id" element={<Protoflio />} />
           </Route>
         </Route>
+        <Route path="*" element={<Err404 />} />
       </Routes>
     </div>
   );

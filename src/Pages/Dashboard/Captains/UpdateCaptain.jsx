@@ -14,12 +14,12 @@ import Switch from "../../../Components/Dashboard/Switch";
 import Loader from "../../../Components/Website/Loader";
 import { CAPTAIN } from "../../../Api/Api";
 import { EditiCaptainSchema } from "../../../Schema/YUP";
+import Err404 from "../../../Components/Utils/Err404";
 const AddCaptain = () => {
   const { token } = useRole();
   const { id } = useParams();
   const nav = useNavigate();
   const [loading, setLoading] = useState(false);
-
   const formik = useFormik({
     initialValues: {
       FullName: "",
@@ -64,7 +64,7 @@ const AddCaptain = () => {
   useEffect(() => {
     async function fetchCaptain() {
       try {
-        const res = api.get(CAPTAIN(id));
+        const res =await api.get(CAPTAIN(id));
         res.then((d) => {
           formik.setFieldValue("FullName", d.data.fullName);
           formik.setFieldValue("YearsOfExperience", d.data.yearsOfExperience);
@@ -76,8 +76,10 @@ const AddCaptain = () => {
           formik.setFieldValue("IsAvailable", d.data.IsAvailable);
           setImage(`https://markeby.runasp.net${d.data["profilePhotoUrl"]}`);
         });
-      } catch (err) {
-        console.log(err);
+      }  catch (err) {
+        if (err.response?.status === 400) {
+          nav("/err404");
+        }
       }
     }
     fetchCaptain();
@@ -106,7 +108,7 @@ const AddCaptain = () => {
         </div>
         <div className="flex justify-between items-center flex-col gap-y-2">
           <button type="submit">
-            <Btn text={"Update Captain"} className={"ml-12"} />
+            <Btn text={"Save Changes"} className={"ml-12"} />
           </button>
         </div>
       </div>
