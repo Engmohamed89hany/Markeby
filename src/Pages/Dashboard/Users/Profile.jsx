@@ -39,7 +39,6 @@ const Profile = () => {
       value: user.phoneNumber || "Not Provided",
     },
   ];
-  console.log(user);
   useEffect(() => {
     async function getUser() {
       try {
@@ -75,7 +74,6 @@ const Profile = () => {
   if (loading) {
     return <Loader />;
   }
-  console.log(user)
   return (
     <div>
       <div className="heading flex justify-between items-start">

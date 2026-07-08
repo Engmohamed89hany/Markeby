@@ -21,6 +21,8 @@ import Users from "./Pages/Dashboard/Users/Users";
 import Err404 from "./Components/Utils/Err404";
 import Profile from "./Pages/Dashboard/Users/Profile";
 import UpdateUser from "./Pages/Dashboard/Users/UpdateUser";
+import CaptainProfile from "./Pages/Dashboard/Captains/CaptainProfile";
+import ProtoflioShip from "./Pages/Dashboard/Ships/ProtoflioShip";
 const App = () => {
   return (
     <div className="bg-background min-h-screen">
@@ -38,9 +40,11 @@ const App = () => {
             <Route path="captains" element={<Captains />} />
             <Route path="captains/:id" element={<UpdateCaptain />} />
             <Route path="addcaptain" element={<AddCaptain />} />
+            <Route path="captains/protoflio/:id" element={<CaptainProfile />} />
             <Route path="vessels" element={<Vessels />} />
             <Route path="addvessel" element={<AddShip />} />
             <Route path="vessels/:id" element={<UpdateVessel />} />
+            <Route path="vessels/protoflio/:id" element={<ProtoflioShip />} />
             <Route path="trips" element={<Trips />} />
             <Route path="addtrip" element={<AddTrip />} />
             <Route path="trips/:id" element={<UpdateTrip />} />

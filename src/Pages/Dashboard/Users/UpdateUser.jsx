@@ -42,19 +42,6 @@ const UpdateUser = () => {
       .required("Address is required")
       .min(5, "Address must be at least 5 characters")
       .max(200, "Address must be less than 200 characters"),
-    ProfileImgUrl: Yup.mixed()
-      .nullable()
-      .test("fileSize", "Image size must be less than 2MB", (value) => {
-        if (!value || typeof value === "string") return true;
-        return value.size <= 2 * 1024 * 1024;
-      })
-      .test("fileType", "Only JPG, JPEG, PNG and WEBP are allowed", (value) => {
-        if (!value || typeof value === "string") return true;
-
-        return ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
-          value.type,
-        );
-      }),
   });
   const formik = useFormik({
     initialValues: {
@@ -85,11 +72,12 @@ const UpdateUser = () => {
           formData.append("ProfileImgUrl", values.ProfileImgUrl);
         }
 
-        await api.put(`/Users/profile`, formData, {
+        const res = await api.put(`/Users/profile`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+        nav("/dashboard/users");
       } catch (error) {
         console.error(error);
       }
@@ -99,7 +87,6 @@ const UpdateUser = () => {
     async function getUser() {
       try {
         const res = await api.get(`Users/${id}`);
-        console.log(res.data);
         formik.setValues({
           FirstName: res.data.firstName,
           LastName: res.data.lastName,
@@ -110,7 +97,7 @@ const UpdateUser = () => {
           Address: res.data.address || "",
           ProfileImgUrl: res.data.profileImgUrl || "",
         });
-        setRole(res.data.roles[0]||"");
+        setRole(res.data.roles[0] || "");
       } catch (error) {
         if (error.response && error.response.status === 404) {
           nav("/err404");
@@ -157,37 +144,35 @@ const UpdateUser = () => {
             className="w-[100px] h-[100px] object-cover rounded-full absolute bottom-[-50px] left-[30px]"
           />
         ) : (
-          <div className="bg-gray-300 h-[100px] bottom-[-50px] left-[30px] absolute flex justify-center items-center w-[150px] text-center rounded-md">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-              alt="Default Profile"
-              className="w-[100px] h-[100px] rounded-full"
-            />
-            <div className="upload absolute bottom-[-10px] right-[-10px] flex justify-center items-center gap-x-2  py-1 px-2 text-[14px] text-primary">
-              <FaCamera
-                className="text-[30px] cursor-pointer"
-                onClick={() => imageRef.current?.click()}
-              />
-              {formik.touched.ProfileImgUrl && formik.errors.ProfileImgUrl && (
-                <span className="text-red-600 text-sm">
-                  {formik.errors.ProfileImgUrl}
-                </span>
-              )}
-            </div>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(event) => {
-                formik.setFieldValue(
-                  "ProfileImgUrl",
-                  event.currentTarget.files[0],
-                );
-              }}
-              className="hidden"
-              ref={imageRef}
-            />
-          </div>
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+            alt="Default Profile"
+            className="w-[100px] h-[100px] rounded-full absolute bottom-[-50px] left-[30px]"
+          />
         )}
+
+        <div
+          className="absolute bottom-[-50px] left-[100px] bg-white rounded-full p-2 cursor-pointer shadow"
+          onClick={() => imageRef.current?.click()}
+        >
+          <FaCamera className="text-xl text-primary" />
+        </div>
+
+        <input
+          ref={imageRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (file) {
+              formik.setFieldValue("ProfileImgUrl", file);
+            }
+
+            // علشان لو اختار نفس الصورة تاني يشتغل
+            e.target.value = "";
+          }}
+        />
       </div>
       <div className="user-info mt-[90px] bg-white border border-gray-100 rounded-md shadow-md px-5 py-6">
         <h3 className="text-[30px] text-secondary font-semibold mb-4 flex items-center gap-x-2">

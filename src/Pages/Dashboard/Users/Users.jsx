@@ -18,7 +18,6 @@ const Users = () => {
   const [loading, setLoading] = useState(false);
   const [isDelete, setIsDelete] = useState(0);
   const [totalUsers, setTotalUsers] = useState(0);
-  console.log(users);
   const [navgate, setNavgate] = useState({
     pageNumber: 1,
     pageSize: 3,
@@ -43,7 +42,7 @@ const Users = () => {
             });
             setUsers(t.data.items);
             setTotalUsers(t.data.totalCount);
-            console.log(t);
+    
           });
       } catch (err) {
         console.log(err);

@@ -64,19 +64,18 @@ const AddCaptain = () => {
   useEffect(() => {
     async function fetchCaptain() {
       try {
-        const res =await api.get(CAPTAIN(id));
-        res.then((d) => {
-          formik.setFieldValue("FullName", d.data.fullName);
-          formik.setFieldValue("YearsOfExperience", d.data.yearsOfExperience);
-          formik.setFieldValue("Email", d.data.email);
-          formik.setFieldValue("Languages", d.data.languages);
-          formik.setFieldValue("Bio", d.data.bio);
-          formik.setFieldValue("PhoneNumber", d.data.phoneNumber);
-          formik.setFieldValue("Rank", d.data.rank);
-          formik.setFieldValue("IsAvailable", d.data.IsAvailable);
-          setImage(`https://markeby.runasp.net${d.data["profilePhotoUrl"]}`);
-        });
-      }  catch (err) {
+        const res = await api.get(CAPTAIN(id));
+
+        formik.setFieldValue("FullName", res.data.fullName);
+        formik.setFieldValue("YearsOfExperience", res.data.yearsOfExperience);
+        formik.setFieldValue("Email", res.data.email);
+        formik.setFieldValue("Languages", res.data.languages);
+        formik.setFieldValue("Bio", res.data.bio);
+        formik.setFieldValue("PhoneNumber", res.data.phoneNumber);
+        formik.setFieldValue("Rank", res.data.rank);
+        formik.setFieldValue("IsAvailable", res.data.IsAvailable);
+        setImage(`https://markeby.runasp.net${res.data["profilePhotoUrl"]}`);
+      } catch (err) {
         if (err.response?.status === 400) {
           nav("/err404");
         }
@@ -84,6 +83,7 @@ const AddCaptain = () => {
     }
     fetchCaptain();
   }, [id]);
+  console.log(formik.values);
   function handelimage(e) {
     const file = e.target.files.item(0);
     if (file) {
